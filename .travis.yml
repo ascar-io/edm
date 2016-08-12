@@ -1,0 +1,20 @@
+language: cpp
+compiler:
+- clang
+- gcc
+os:
+- linux
+- osx
+before_install:
+- echo $LANG
+- echo $LC_ALL
+script: make && make test
+branches:
+  only:
+  - master
+notifications:
+  slack:
+    secure: X6I9TCqI+kXyePNN1Rl8E25xEQMZO2kwIcx16SZpGATVVRDmVuCALVESI1HB4m1mRDAwKErdr0BHLWS8JWzZUqI5DoHL6fi3SJw79DoA4MEmz8APeUniYZ7Y4wEXSqvAxmxPu96XxDjBfQnPfjSE11emid4tB/4G8IiarwC7YcrAw1MVPPDKb/zG9S9Kurqop/OhL4dCg0IpXzjgxWC4MUomURvLYTaYPkoQmbfNp9k6aKeJx0ForjAHRXfH+p7UUNXnzjLqYVkq6aZUsIB8VAwbr+rXcGs26XacaQ4y0pOvFcTtYD+UldVYbUmgwrbeELWWdzRlrXxLaOsAGbv4ZCLJl0w6v+hysyzjB2TdRefdKqFvKZHBJJjy9dr3QrGSu5uzmqhK7FbKCV14icTA/dWKE6ps8f6iTBWCkkr2rNeIwO/3bEo8d4B5W1TkabI8oQjdnjSVudaGFPdmmLuDKCI9ScDQCKEiA/bYyelN3qYEdx/rhdK9NLQgVk5104Bqw1uXIq77V6VfWWciqnuoVaah9kLylwKZ+cpV31u9rGbFwukOvj7kpwUV6bpezZngX1SOWj9Y2twDRYVcxLsxbhxW5Jb/XCae5IE27QyTlNSOjjLEDVp8+09b6dyUz677sMTx2x/trfjr01Qzld4777q9CxvVPidburxPp5sBXvg=
+env:
+  global:
+  - LANG="en_US.UTF-8"
