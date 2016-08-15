@@ -7,9 +7,9 @@
  * Copyright: Yash Gupta, SSRC - UC Santa Cruz
  */
 
- #include <stdio.h>
- #include <iostream>
- #include <math.h>
+#include <stdio.h>
+#include <iostream>
+#include <math.h>
 
 /* Change these macros on basis of requirement */
 #define ROOT_BEG        (0.0)       // Beginning of the Root Node Interval
@@ -41,7 +41,7 @@ class IntervalTree {
     IntervalNode* makeNode(double, double);
 
     bool isLeafNode(IntervalNode *node) {
-        if (node -> left) {
+        if (node->left) {
             return false;
         } else if (node -> right) {
             return false;

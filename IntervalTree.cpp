@@ -30,7 +30,7 @@ IntervalTree::~IntervalTree()
     _garbageCollect(root);
 }
 
-/*
+/**
  * Free's all the heap memory
  * acquired by the Tree
  *
@@ -40,11 +40,11 @@ IntervalTree::~IntervalTree()
 void
 IntervalTree::_garbageCollect(IntervalNode *node)
 {
-    if (node -> left) {
-        _garbageCollect(node -> left);
+    if (node->left) {
+        _garbageCollect(node->left);
     }
 
-    IntervalNode *temp = node -> right;
+    IntervalNode *temp = node->right;
     delete node;
 
     if (temp) {
@@ -52,7 +52,7 @@ IntervalTree::_garbageCollect(IntervalNode *node)
     }
 }
 
-/*
+/**
  * User facing contruct call which checks
  * for a valid boolean and then initializes
  * tree if valid
@@ -69,7 +69,7 @@ IntervalTree::constructTree()
     }
 }
 
-/*
+/**
  * Construct an interval tree recursively
  * using the intervals provided
  *
@@ -88,13 +88,13 @@ IntervalTree::_constructTree(IntervalNode** node, double low, double high)
 
     if (depthLevel < _depthLevel) {
         depthLevel += 1;
-        _constructTree(&((*node) -> left), low, (low + high) / 2.0);
-        _constructTree(&((*node) -> right), (low + high) / 2.0, high);
+        _constructTree(&((*node)->left), low, (low + high) / 2.0);
+        _constructTree(&((*node)->right), (low + high) / 2.0, high);
         depthLevel -= 1;
     }
 }
 
-/*
+/**
  * Make a tree node based on the
  * interval passed
  *
@@ -106,15 +106,15 @@ IntervalNode*
 IntervalTree::makeNode(double low, double high)
 {
     IntervalNode *newNode = new IntervalNode;
-    newNode -> intervalSpan.low = low;
-    newNode -> intervalSpan.high = high;
-    newNode -> observationsInInterval = 0;
-    newNode -> left = newNode -> right = NULL;
+    newNode->intervalSpan.low = low;
+    newNode->intervalSpan.high = high;
+    newNode->observationsInInterval = 0;
+    newNode->left = newNode->right = NULL;
 
     return newNode;
 }
 
-/*
+/**
  * Creates an interval structure based on
  * the observation and Creates a node
  * based on it
@@ -133,7 +133,7 @@ IntervalTree::add(double observation)
     }
 }
 
-/*
+/**
  * Traverses the tree and adds the
  * observation to it
  *
@@ -149,9 +149,9 @@ IntervalTree::_add(IntervalNode *node, double observation)
     // TODO: Clean up checks
 
     // Check for left child interval
-    if ((observation >= node -> intervalSpan.low) && (observation < ((node -> intervalSpan.low + node -> intervalSpan.high) / 2.0))) {
-        if (node -> left) {
-            _add(node -> left, observation);
+    if ((observation >= node->intervalSpan.low) && (observation < ((node->intervalSpan.low + node->intervalSpan.high) / 2.0))) {
+        if (node->left) {
+            _add(node->left, observation);
         } else {
             return;
         }
@@ -159,16 +159,16 @@ IntervalTree::_add(IntervalNode *node, double observation)
 
     // Check for right child interval
     // TODO: The interval should be closed for the right most leaf node
-    if ((observation >= ((node -> intervalSpan.low + node -> intervalSpan.high) / 2.0)) && (observation < node -> intervalSpan.high)) {
-        if (node -> right) {
-            _add(node -> right, observation);
+    if ((observation >= ((node->intervalSpan.low + node->intervalSpan.high) / 2.0)) && (observation < node->intervalSpan.high)) {
+        if (node->right) {
+            _add(node->right, observation);
         } else {
             return;
         }
     }
 }
 
-/*
+/**
  * Call median calculator
  */
 double
@@ -182,7 +182,7 @@ IntervalTree::getApproxMedian()
     }
 }
 
-/*
+/**
  * Calculate median based on EDM
  * implementation.
  *
@@ -194,33 +194,33 @@ double
 IntervalTree::_getApproxMedian(IntervalNode *node, long K)
 {
     if (isLeafNode(node)) {
-        return (node -> intervalSpan.low + node -> intervalSpan.high) / 2.0;
+        return (node->intervalSpan.low + node->intervalSpan.high) / 2.0;
     }
 
-    if (node -> observationsInInterval == K) {
-        long leftObservation = node -> left -> observationsInInterval;
-        long rightObservation = node -> right -> observationsInInterval;
+    if (node->observationsInInterval == K) {
+        long leftObservation = node->left->observationsInInterval;
+        long rightObservation = node->right->observationsInInterval;
 
-        double leftMidPoint = (node -> left -> intervalSpan.low + node -> left -> intervalSpan.high) / 2.0;
-        double rightMidPoint = (node -> right -> intervalSpan.low + node -> right -> intervalSpan.high) / 2.0;
+        double leftMidPoint = (node->left->intervalSpan.low + node->left->intervalSpan.high) / 2.0;
+        double rightMidPoint = (node->right->intervalSpan.low + node->right->intervalSpan.high) / 2.0;
 
         return (double)(((leftObservation * leftMidPoint) + (rightObservation * rightMidPoint)) / (leftObservation + rightObservation));
     }
 
-    if (node -> left -> observationsInInterval >= K) {
-        return _getApproxMedian(node -> left, K);
+    if (node->left->observationsInInterval >= K) {
+        return _getApproxMedian(node->left, K);
     }
 
-    if (node -> left -> observationsInInterval < K) {
-        K = K - (node -> left -> observationsInInterval);
-        return _getApproxMedian(node -> right, K);
+    if (node->left->observationsInInterval < K) {
+        K = K - (node->left->observationsInInterval);
+        return _getApproxMedian(node->right, K);
     }
 
     // Control flow should never reach here. Error!
     return -1;
 }
 
-/*
+/**
  * Check root for valid value and
  * call displayer if valid
  */
@@ -235,7 +235,7 @@ IntervalTree::displayTree()
     _displayTree(tempNode);
 }
 
-/*
+/**
  * In order traversal of Tree
  * to display all the intervals
  *
@@ -245,30 +245,13 @@ IntervalTree::displayTree()
 void
 IntervalTree::_displayTree(IntervalNode *node)
 {
-    if (node -> left) {
-        _displayTree(node -> left);
+    if (node->left) {
+        _displayTree(node->left);
     }
 
-    printf("[%0.3f, %0.3f] Observations: %ld\n", node -> intervalSpan.low, node -> intervalSpan.high, node -> observationsInInterval);
+    printf("[%0.3f, %0.3f] Observations: %ld\n", node->intervalSpan.low, node->intervalSpan.high, node->observationsInInterval);
 
-    if (node -> right) {
-        _displayTree(node -> right);
+    if (node->right) {
+        _displayTree(node->right);
     }
-}
-
-/* Test Driver */
-int
-main()
-{
-    IntervalTree test(true, 2);
-    test.add(0.09);
-    test.add(0.42);
-    test.add(0.99);
-    test.add(0.3);
-    test.displayTree();
-    std::cout << std::endl;
-
-    std::cout << "Approximate Median: " << test.getApproxMedian() << std::endl;
-
-    return 0;
 }
