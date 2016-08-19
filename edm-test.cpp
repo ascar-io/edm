@@ -32,6 +32,7 @@
  */
 
 #include "IntervalTree.h"
+#include <cmath>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -65,7 +66,6 @@ double vector_median(const vector<double> &v) {
  * @return true on success, false on failure
  */
 bool test_interval_tree_using_samples(istream &in) {
-    IntervalTree test(true);
     size_t sample_size;
     double exp_median;
 
@@ -76,6 +76,8 @@ bool test_interval_tree_using_samples(istream &in) {
     check (!in.fail() && in.peek() == ',')
     in.seekg(1, in.cur);    // skip ','
 
+    const int tree_depth = (int)std::ceil(std::log(sample_size));
+    IntervalTree test(true, tree_depth);
     vector<double> samples(sample_size);
     for (size_t i = 0; i < sample_size; ++i) {
         double d;
