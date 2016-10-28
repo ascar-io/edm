@@ -6,14 +6,20 @@ paper https://arxiv.org/pdf/1411.7955.pdf.
 
 # Developer Information
 
-## Test cases
+## Test case for IntervalTree
 
-{small,large}_size_sample_sets.csv are for testing IntervalTree. They are csv files and the format is:
+{small,large}_size_sample_sets.csv are for testing IntervalTree. They
+contain arrays of randomly generated numbers and the expected median
+calculated by using the reference code. They are csv files and the
+format is:
 
 ```
 sample_size,calculated_approx_median,samples
 ```
 
-IntervalTree's calculated approximate median from `samples` should
+Our IntervalTree's calculated approximate median from `samples` should
 match `calculated_approx_median`. See
-`test_interval_tree_using_samples()` in `edm-test.cpp`.
+`test_interval_tree_using_samples()` in `edm-test.cpp`. If our
+calculated median does not equal the expected median, we calculate
+their respective errors from the real median and print "We lost" or "We
+won" depends on if our error is larger or smaller.

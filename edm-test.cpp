@@ -31,10 +31,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "IntervalTree.h"
+#include <algorithm>
 #include <cmath>
 #include <cstring>
 #include <fstream>
+#include "IntervalTree.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -94,11 +95,21 @@ bool test_interval_tree_using_samples(istream &in) {
     }
     if (test.getApproxMedian() != exp_median) {
         sort(samples.begin(), samples.end());
+        double real_median = vector_median(samples);
+        double edm_error = abs(real_median - exp_median);
+        double our_error = abs(real_median - test.getApproxMedian());
         cerr << "Failed test. Sample size: " << sample_size
              << ", expected value " << exp_median
              << ", actual value " << test.getApproxMedian()
-             << ", real median " << vector_median(samples)
-             << endl;
+             << ", real median " << real_median
+             << ", EDM error " << edm_error
+             << ", our error " << our_error << ". ";
+        if (our_error < edm_error)
+            cerr << "We won.";
+        else
+            cerr << "We lost.";
+        cerr << endl;
+        // test.displayTree();
         return false;
     }
     return true;
