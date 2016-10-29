@@ -6,7 +6,10 @@
  * Copyright: Yash Gupta, SSRC - UC Santa Cruz
  */
 
+#include <cmath>
 #include "EDM.h"
+
+using namespace std;
 
 /* Default Constructor */
 Breakpoint::Breakpoint(double *passedTimeSeries, long passedCount, long passedSigma, long passedDepth)
@@ -20,8 +23,8 @@ Breakpoint::Breakpoint(double *passedTimeSeries, long passedCount, long passedSi
     wiDistRight = new IntervalTree(true, treeDepth);
     bwDistTree = new IntervalTree(true, treeDepth);
 
-    tau = INIT_TAU;
-    kappa = INIT_KAPPA;
+    tau = sigma;
+    kappa = tau * 2;
 }
 
 /* Destructor */

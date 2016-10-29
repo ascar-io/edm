@@ -41,7 +41,7 @@ QUIET_LINK = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(EN
 QUIET_INSTALL = @printf '    %b %b\n' $(LINKCOLOR)INSTALL$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
 endif
 
-all: edm-test
+all: edm-test edm-unit-tests
 	@echo ""
 	@echo "Hint: It's a good idea to run 'make test' ;)"
 	@echo ""
@@ -49,6 +49,9 @@ all: edm-test
 .PHONY: all
 
 edm-test: IntervalTree.o edm-test.o
+	$(MY_LD) -o $@ $^ $(FINAL_LIBS)
+
+edm-unit-tests: IntervalTree.o EDM.o edm-unit-tests.o
 	$(MY_LD) -o $@ $^ $(FINAL_LIBS)
 
 # Deps (use make dep to generate this)
@@ -98,6 +101,7 @@ distclean: clean
 .PHONY: distclean
 
 test: edm-test
+	@./edm-unit-tests
 	@./edm-test small_size_sample_sets.csv
 	@./edm-test large_size_sample_sets.csv
 

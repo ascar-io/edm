@@ -8,9 +8,6 @@
 
 #include "IntervalTree.h"
 
-#define INIT_TAU    (0)     // TODO: Change
-#define INIT_KAPPA  (0)     // TODO: Change
-
 class Breakpoint {
     long tau;               // EDM Variable
     long kappa;             // EDM Variable

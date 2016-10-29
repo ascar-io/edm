@@ -1,1 +1,4 @@
+EDM.o: EDM.cpp EDM.h IntervalTree.h
+edm-test.o: edm-test.cpp IntervalTree.h
+edm-unit-tests.o: edm-unit-tests.cpp EDM.h IntervalTree.h
 IntervalTree.o: IntervalTree.cpp IntervalTree.h
