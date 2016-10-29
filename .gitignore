@@ -2,4 +2,4 @@
 *.o
 .*project
 .make-*
-edm-test
+edm-*test
