@@ -25,13 +25,13 @@ static void
 _scaleTimeSeries(double *timeSeries, long count) {
     double max = timeSeries[0];
 
-    for (size_t i = 1; i < count; i++) {
+    for (long i = 1; i < count; i++) {
         if (timeSeries[i] > max) {
             max = timeSeries[i];
         }
     }
 
-    for (size_t i = 0; i < count; i++) {
+    for (long i = 0; i < count; i++) {
         timeSeries[i] /= max;
     }
 }
@@ -72,16 +72,16 @@ Breakpoint::getBreakpointLocation()
     short forwardMove = 0;
 
     // Initialize within distance trees
-    for (size_t i = 0; i < delta; ++i) {
-        for (size_t j = i + 1; j < delta; ++j) {
+    for (long i = 0; i < delta; ++i) {
+        for (long j = i + 1; j < delta; ++j) {
             wiDistLeft->add(abs(timeSeries[i] - timeSeries[j]));
             wiDistRight->add(abs(timeSeries[i + (delta - 1)] - timeSeries[j + (delta - 1)]));
         }
     }
 
     // Initialize between distance tree
-    for (size_t i = 0; i < delta; ++i) {
-        for (size_t j = 0; j < delta; ++j) {
+    for (long i = 0; i < delta; ++i) {
+        for (long j = 0; j < delta; ++j) {
             bwDistTree->add(abs(timeSeries[i] - timeSeries[j + (delta - 1)]));
         }
     }
