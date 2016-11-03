@@ -14,7 +14,7 @@ class Breakpoint {
     double bestStat;        // EDM Variable
     double *timeSeries;     // Time series containing the observations
     long timeSeriesCount;   // Observations in time series
-    long sigma;             // Sigma variable which breaks up total observations in series
+    long delta;             // Delta variable which breaks up total observations in series
     long treeDepth;         // Depth of tree to be made
     long bestLocation;      // Breakpoint Location
 

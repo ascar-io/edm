@@ -11,20 +11,47 @@
 
 using namespace std;
 
+/**
+ * Scales the values in the time series to
+ * the interval (0, 1]. Current algorithm
+ * simply finds the largest observation and
+ * divides the entire series by it.
+ *
+ * Arguments
+ *      timeSeries: The Series to scale
+ *      count: The number of observations in series
+ */
+static void
+_scaleTimeSeries(double *timeSeries, long count) {
+    double max = timeSeries[0];
+
+    for (size_t i = 1; i < count; i++) {
+        if (timeSeries[i] > max) {
+            max = timeSeries[i];
+        }
+    }
+
+    for (size_t i = 0; i < count; i++) {
+        timeSeries[i] /= max;
+    }
+}
+
 /* Default Constructor */
-Breakpoint::Breakpoint(double *passedTimeSeries, long passedCount, long passedSigma, long passedDepth)
+Breakpoint::Breakpoint(double *passedTimeSeries, long passedCount, long passedDelta, long passedDepth)
 {
     timeSeries = passedTimeSeries;
     timeSeriesCount = passedCount;
-    sigma = passedSigma;
+    delta = passedDelta;
     treeDepth = passedDepth;
 
     wiDistLeft = new IntervalTree(true, treeDepth);
     wiDistRight = new IntervalTree(true, treeDepth);
     bwDistTree = new IntervalTree(true, treeDepth);
 
-    tau = sigma;
+    tau = delta;
     kappa = tau * 2;
+
+    _scaleTimeSeries(timeSeries, timeSeriesCount);
 }
 
 /* Destructor */
@@ -41,22 +68,21 @@ Breakpoint::~Breakpoint() {
 long
 Breakpoint::getBreakpointLocation()
 {
-    int i, j;
     double median1, median2, median3;
     short forwardMove = 0;
 
     // Initialize within distance trees
-    for (i = 0; i < sigma; ++i) {
-        for (j = i + 1; j < sigma; ++j) {
+    for (size_t i = 0; i < delta; ++i) {
+        for (size_t j = i + 1; j < delta; ++j) {
             wiDistLeft->add(abs(timeSeries[i] - timeSeries[j]));
-            wiDistRight->add(abs(timeSeries[i + (sigma - 1)] - timeSeries[j + (sigma - 1)]));
+            wiDistRight->add(abs(timeSeries[i + (delta - 1)] - timeSeries[j + (delta - 1)]));
         }
     }
 
     // Initialize between distance tree
-    for (i = 0; i < sigma; ++i) {
-        for (j = 0; j < sigma; ++j) {
-            bwDistTree->add(abs(timeSeries[i] - timeSeries[j + (sigma - 1)]));
+    for (size_t i = 0; i < delta; ++i) {
+        for (size_t j = 0; j < delta; ++j) {
+            bwDistTree->add(abs(timeSeries[i] - timeSeries[j + (delta - 1)]));
         }
     }
 
@@ -66,10 +92,10 @@ Breakpoint::getBreakpointLocation()
 
     bestStat = (tau * (kappa - tau)) / kappa;
     bestStat = bestStat * (2 * median1 - median2 - median3);
-    bestLocation = (sigma - 1);
-    tau = (sigma - 1);
+    bestLocation = (delta - 1);
+    tau = (delta - 1);
 
-    while (tau < (timeSeriesCount - sigma)) {
+    while (tau < (timeSeriesCount - delta)) {
         if (forwardMove) {
             forwardUpdate();
         } else {
@@ -92,7 +118,7 @@ Breakpoint::forwardUpdate()
     long tempKappa;
 
     ++tau;
-    for (tempKappa = tau + (sigma - 1); tempKappa < timeSeriesCount; ++tempKappa) {
+    for (tempKappa = tau + (delta - 1); tempKappa < timeSeriesCount; ++tempKappa) {
         wiDistRight->add(abs(/*-*/timeSeries[tempKappa] - timeSeries[tempKappa - 1]));
         median1 = bwDistTree->getApproxMedian();
         median2 = wiDistLeft->getApproxMedian();
@@ -119,7 +145,7 @@ Breakpoint::backwardUpate()
 
     ++tau;
     tempKappa = (timeSeriesCount - 1);
-    while (tempKappa >= (tau + (sigma - 1))) {
+    while (tempKappa >= (tau + (delta - 1))) {
         wiDistRight->add(abs(timeSeries[tempKappa] - timeSeries[tempKappa - 1]));
         median1 = bwDistTree->getApproxMedian();
         median2 = wiDistLeft->getApproxMedian();
