@@ -157,9 +157,17 @@ IntervalTree::_add(IntervalNode *node, double observation)
         }
     }
 
-    // Check for right child interval
-    // TODO: The interval should be closed for the right most leaf node
-    if ((observation >= ((node->intervalSpan.low + node->intervalSpan.high) / 2.0)) && (observation < node->intervalSpan.high)) {
+    // Check for right child interval. Have a closed right interval if the high value is 1
+    if (node->intervalSpan.high == 1) {
+        if ((observation >= ((node->intervalSpan.low + node->intervalSpan.high) / 2.0)) && (observation <= node->intervalSpan.high)) {
+            if (node->right) {
+                _add(node->right, observation);
+            } else {
+                return;
+            }
+        }
+    }
+    else if ((observation >= ((node->intervalSpan.low + node->intervalSpan.high) / 2.0)) && (observation < node->intervalSpan.high)) {
         if (node->right) {
             _add(node->right, observation);
         } else {

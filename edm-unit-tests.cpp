@@ -36,6 +36,7 @@ int main()
     test.add(0.42);
     test.add(0.99);
     test.add(0.3);
+	test.add(1.0);
     test.displayTree();
     std::cout << std::endl;
 
