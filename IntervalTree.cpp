@@ -202,7 +202,15 @@ double
 IntervalTree::_getApproxMedian(IntervalNode *node, long K)
 {
     if (isLeafNode(node)) {
-        return (node->intervalSpan.low + node->intervalSpan.high) / 2.0;
+        if (k != node->observationsInInterval) {
+            double low = node->intervalSpan.low;
+            double high = node->intervalSpan.high;
+            double weight = (double)K / (double)(node->observationsInInterval);
+
+            return low + ((high - low) * weight);
+        } else if (K == node->observationsInInterval) {
+            // TODO: Implement Yan's Idea
+        }
     }
 
     if (node->observationsInInterval == K) {

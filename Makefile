@@ -91,7 +91,7 @@ endif
 	$(MY_CXX) -c $<
 
 clean:
-	rm -rf edm-test *.o
+	rm -rf edm-test *.o edm-unit-tests
 
 .PHONY: clean
 

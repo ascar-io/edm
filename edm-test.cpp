@@ -77,7 +77,7 @@ bool test_interval_tree_using_samples(istream &in) {
     check (!in.fail() && in.peek() == ',')
     in.seekg(1, in.cur);    // skip ','
 
-    const int tree_depth = (int)std::ceil(std::log(sample_size));
+    const int tree_depth = (int)std::ceil(std::log(sample_size)) - 1;
     IntervalTree test(true, tree_depth);
     vector<double> samples(sample_size);
     for (size_t i = 0; i < sample_size; ++i) {
