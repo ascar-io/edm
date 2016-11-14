@@ -23,48 +23,68 @@ struct Interval {
 struct IntervalNode {
     long observationsInInterval;    // Observations observed in this Interval
     Interval intervalSpan;          // Interval Span for this Node
-    IntervalNode *left;             // Left Child
-    IntervalNode *right;            // Right Child
 };
 
 class IntervalTree {
-    IntervalNode *root;         // Root of tree
+    IntervalNode *tree;         // The Tree array
+    long _treeSize;             // Sizenifies size of the array
     bool isInitialized;         // Determines whether tree has been initialized or not
-    int nodesAdded;             // Number of Nodes added to tree
-    int _depthLevel;            // Depth level of the tree
+    long nodesAdded;            // Number of Nodes added to tree
+    unsigned long _depthLevel;  // Depth level of the tree
 
-    void _garbageCollect(IntervalNode *);
-    void _constructTree(IntervalNode**, double, double);
-    void _add(IntervalNode *, double);
-    void _displayTree(IntervalNode *);
-    double _getApproxMedian(IntervalNode *, long K);
-    IntervalNode* makeNode(double, double);
+    void _garbageCollect();
+    void _constructTree(double, double);
+    void _add(long, double);
+    void _displayTree(long);
+    double _getApproxMedian(long, long);
 
-    bool isLeafNode(IntervalNode *node) {
-        if (node->left) {
-            return false;
-        } else if (node -> right) {
-            return false;
-        } else {
+    /**
+     * Get boolean value to know
+     * whether specified node is a leaf
+     * node of the tree or not
+     */
+    bool isLeafNode(long index) {
+        long leftChild = (index << 1) + 1;
+        long rightChild = (index << 1) + 2;
+
+        if (leftChild >= _treeSize || rightChild >= _treeSize) {
             return true;
+        } else {
+            return false;
         }
     }
 
 public:
-    IntervalTree(bool, int);
+    IntervalTree(bool, unsigned long);
     ~IntervalTree();
 
+    /**
+     * Wrapper for adding an element to the tree
+     */
     void add(double);
+
+    /**
+     * Wrapper for contructing the tree
+     */
     void constructTree();
+
+    /**
+     * Wrapper for displaying the tree
+     */
     void displayTree();
 
+
+    /**
+     * Wrapper for using the EDM algorithm
+     * to get an approximate median
+     */
     double getApproxMedian();
 
-    IntervalNode *getRoot() {
-        return root;
-    }
-
-    int getSize() {
+    /**
+     * Get the number of observations added
+     * to the tree
+     */
+    long getSize() {
         return nodesAdded;
     }
 };
