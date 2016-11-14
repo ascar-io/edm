@@ -236,7 +236,11 @@ IntervalTree::_getApproxMedian(long index, long K)
         double leftMidPoint = (tempLeft.low + tempLeft.high) / 2.0;
         double rightMidPoint = (tempRight.low + tempRight.high) / 2.0;
 
-        return (double)(((leftObservation * leftMidPoint) + (rightObservation * rightMidPoint)) / (leftObservation + rightObservation));
+        double leftWeight = (double)leftObservation * leftMidPoint;
+        double rightWeight = (double)rightObservation * rightMidPoint;
+        double overallWeight = leftWeight + rightWeight;
+
+        return overallWeight / (double)(leftObservation + rightObservation);
     }
 
     if (tree[leftChild].observationsInInterval >= K) {

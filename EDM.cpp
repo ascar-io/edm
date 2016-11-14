@@ -24,15 +24,18 @@ using namespace std;
 static void
 _scaleTimeSeries(double *timeSeries, long count) {
     double max = timeSeries[0];
+    double min = timeSeries[0];
 
     for (long i = 1; i < count; i++) {
         if (timeSeries[i] > max) {
             max = timeSeries[i];
+        } else if (timeSeries[i] < min) {
+            min = timeSeries[i];
         }
     }
 
     for (long i = 0; i < count; i++) {
-        timeSeries[i] /= max;
+        timeSeries[i]  = (timeSeries[i] - min) / (max - min);
     }
 }
 
