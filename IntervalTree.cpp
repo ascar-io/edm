@@ -203,8 +203,22 @@ IntervalTree::_getApproxMedian(long index, long K)
 
             return low + ((high - low) * weight);
         } else if (K == tree[index].observationsInInterval) {
-            // TODO: Implement Yan's Idea
-            return -1;
+            if (index + 1 < _treeSize) {
+                Interval tempNext = tree[index + 1].intervalSpan;
+                long observationsInNextInterval = tree[index + 1].observationsInInterval;
+                long observationsInCurrentInterval = tree[index].observationsInInterval;
+                double currentLow = temp.low;
+                double currentHigh = temp.high;
+                double nextLow = tempNext.low;
+                double nextHigh = tempNext.high;
+
+                double currentWeight = (currentHigh - currentLow) / (double)observationsInCurrentInterval;
+                double nextWeight = (nextHigh - nextLow) / (double)observationsInNextInterval;
+
+                return (currentWeight + nextWeight) / 2.0;
+            } else {
+                return -1;
+            }
         }
     }
 
@@ -224,7 +238,7 @@ IntervalTree::_getApproxMedian(long index, long K)
     if (tree[leftChild].observationsInInterval >= K) {
         return _getApproxMedian(leftChild, K);
     } else {
-        K = K - (tree[leftChild].observationsInInterval);
+        K = K - tree[leftChild].observationsInInterval;
         return _getApproxMedian(rightChild, K);
     }
 
