@@ -217,7 +217,11 @@ IntervalTree::_getApproxMedian(long index, long K)
 
                 return (currentWeight + nextWeight) / 2.0;
             } else {
-                return -1;
+                double low = temp.low;
+                double high = temp.high;
+                double weight = (double)K / (double)(tree[index].observationsInInterval);
+
+                return low + ((high - low) * weight);
             }
         }
     }
